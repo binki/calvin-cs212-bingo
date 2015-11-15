@@ -27,14 +27,15 @@ namespace Bingo
                 input = input.Replace("\r", ";");                   // get rid of nasty carriage returns 
                 input = input.Replace("\n", ";");                   // get rid of nasty new lines
                 string[] inputItems = Regex.Split(input, @";\s*");  // parse out the relationships (separated by ;)
-                foreach (string item in inputItems) {
+                foreach (string item in inputItems) 
+		{
                     if (item.Length > 2)                            // don't bother with empty relationships
                     {
                         values = Regex.Split(item, @"\s*:\s*");     // parse out relationship:name
                         if (values[0] == "name")                    // name:[personname] indicates start of new person
                         {
                             name = values[1];                       // remember name for future relationships
-                            rg.AddNode(name);                     // create the node
+                            rg.AddNode(name);                       // create the node
                             numPeople++;
                         }
                         else
@@ -46,8 +47,10 @@ namespace Bingo
                                 rg.AddEdge(values[1], name, values[0]);
 
                             // for parent relationships add child as well
-                            if (values[0] == "parent")
+                            else if (values[0] == "parent")
                                 rg.AddEdge(values[1], name, "child");
+                            else if (values[0] == "child")
+                                rg.AddEdge(values[1], name, "parent");
                         }
                     }
                 }

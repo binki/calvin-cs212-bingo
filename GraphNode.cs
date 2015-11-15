@@ -20,8 +20,14 @@ namespace Bingo
             incidentEdges = new List<GraphEdge>();
         }
 
+	// Add an edge (but don't add duplicate edges)
         public void AddIncidentEdge(GraphEdge e)
         {
+	    foreach (GraphEdge edge in incidentEdges)
+	    {
+	        if (edge.ToString() == e.ToString()) 
+		    return;
+	    }
             incidentEdges.Add(e);
         }
 
