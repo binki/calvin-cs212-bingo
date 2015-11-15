@@ -1,13 +1,18 @@
-Professor @hplantin often teaches [CS-212 at Calvin
-College](http://cs.calvin.edu/curriculum/cs/212/hplantin/). As the
-semester goes on, he uncomments/renames anchor elements in [the
-syllabus](http://cs.calvin.edu/curriculum/cs/212/hplantin/syllabus.html)
-to reveal future projects. One such project, Project 4, Bingo, is
+Professor [@hplantin](https://github.com/hplantin) often teaches
+[CS-212 at Calvin
+College](http://cs.calvin.edu/curriculum/cs/212/hplantin/). His course
+includes a number of [programming
+projects](http://cs.calvin.edu/curriculum/cs/212/hplantin/syllabus.html)
+(depending on the time of year, these may be obfuscated—check out the
+raw markup). One such project, Project 4, Bingo, is
 [described](http://cs.calvin.edu/curriculum/cs/212/hplantin/projects/P4-Bingo.pdf)
-(a backup is saved to this repo) and the student is given [seed
+(a [backup is saved to this
+repo](https://github.com/binki/calvin-cs212-bingo/blob/ee69ea4bbe0bb8498faf4c77472ec9225b2edce1/P4-Bingo.pdf))
+and the student is given [seed
 code](http://cs.calvin.edu/curriculum/cs/212/hplantin/projects/prog4.zip)
-(this repository will contain a commit identical to that zip) for
-implementing the project.
+(a subset of this archive was imported on 2015-11-14 as [commit
+51ba2eab8cfe89b434f089258001d8ad7ef57ddb](https://github.com/binki/calvin-cs212-bingo/commit/51ba2eab8cfe89b434f089258001d8ad7ef57ddb))
+for implementing the project.
 
 [This repository](https://github.com/binki/calvin-cs212-bingo)’s
 purpose is to improve upon that seed code to make it more exemplary.
