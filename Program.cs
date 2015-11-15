@@ -38,18 +38,26 @@ namespace Bingo
                             rg.AddNode(name);                       // create the node
                             numPeople++;
                         }
-                        else
-                        {               
-                            rg.AddEdge(name, values[1], values[0]); // add relationship (name1, name2, relationship)
+                        // Keys defining relationships start with “has” followed
+                        // by a relationship name.
+                        else if (values[0].StartsWith("has"))
+                        {
+                            // Extract relationship name from after “has”. E.g.,
+                            // hasFriend.
+                            var relationship = values[0].Substring("has".Length);
+                            // PascalCase -> camelCase. E.g., Friend -> friend.
+                            if (relationship.Length > 0)
+                                relationship = char.ToLowerInvariant(relationship[0]) + relationship.Substring(1);
+                            rg.AddEdge(name, values[1], relationship); // add relationship (name1, name2, relationship)
 
                             // handle symmetric relationships -- add the other way
-                            if (values[0] == "spouse" || values[0] == "friend")
-                                rg.AddEdge(values[1], name, values[0]);
+                            if (relationship == "spouse" || relationship == "friend")
+                                rg.AddEdge(values[1], name, relationship);
 
                             // for parent relationships add child as well
-                            else if (values[0] == "parent")
+                            else if (relationship == "parent")
                                 rg.AddEdge(values[1], name, "child");
-                            else if (values[0] == "child")
+                            else if (relationship == "child")
                                 rg.AddEdge(values[1], name, "parent");
                         }
                     }
