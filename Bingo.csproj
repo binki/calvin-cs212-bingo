@@ -42,6 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command.cs" />
+    <Compile Include="Commands\Dump.cs" />
+    <Compile Include="Commands\Exit.cs" />
+    <Compile Include="Commands\Friends.cs" />
+    <Compile Include="Commands\Help.cs" />
+    <Compile Include="Commands\Read.cs" />
+    <Compile Include="Commands\Show.cs" />
     <Compile Include="GraphEdge.cs" />
     <Compile Include="GraphNode.cs" />
     <Compile Include="Program.cs" />

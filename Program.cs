@@ -9,137 +9,58 @@ namespace Bingo
 {
     class Program
     {
-        private static RelationshipGraph rg;
+        public RelationshipGraph RelationshipGraph { get; set; } = new RelationshipGraph();
+        public bool ShouldExit { get; set; }
 
-        // Read RelationshipGraph whose filename is passed in as a parameter.
-        // Build a RelationshipGraph in RelationshipGraph rg
-        private static void ReadRelationshipGraph(string filename)
+        public IReadOnlyDictionary<string, Command> Commands { get; }
+
+        Command HelpCommand { get; }
+
+        Program()
         {
-            rg = new RelationshipGraph();                           // create a new RelationshipGraph object
-
-            string name = "";                                       // name of person currently being read
-            int numPeople = 0;
-            string[] values;
-            Console.Write("Reading file " + filename + "\n");
-            try
-            {
-                string input = System.IO.File.ReadAllText(filename);// read file
-                input = input.Replace("\r", ";");                   // get rid of nasty carriage returns 
-                input = input.Replace("\n", ";");                   // get rid of nasty new lines
-                string[] inputItems = Regex.Split(input, @";\s*");  // parse out the relationships (separated by ;)
-                foreach (string item in inputItems) 
-		{
-                    if (item.Length > 2)                            // don't bother with empty relationships
-                    {
-                        values = Regex.Split(item, @"\s*:\s*");     // parse out relationship:name
-                        if (values[0] == "name")                    // name:[personname] indicates start of new person
-                        {
-                            name = values[1];                       // remember name for future relationships
-                            rg.AddNode(name);                       // create the node
-                            numPeople++;
-                        }
-                        // Keys defining relationships start with “has” followed
-                        // by a relationship name.
-                        else if (values[0].StartsWith("has"))
-                        {
-                            // Extract relationship name from after “has”. E.g.,
-                            // hasFriend.
-                            var relationship = values[0].Substring("has".Length);
-                            // PascalCase -> camelCase. E.g., Friend -> friend.
-                            if (relationship.Length > 0)
-                                relationship = char.ToLowerInvariant(relationship[0]) + relationship.Substring(1);
-                            rg.AddEdge(name, values[1], relationship); // add relationship (name1, name2, relationship)
-
-                            // handle symmetric relationships -- add the other way
-                            if (relationship == "spouse" || relationship == "friend")
-                                rg.AddEdge(values[1], name, relationship);
-
-                            // for parent relationships add child as well
-                            else if (relationship == "parent")
-                                rg.AddEdge(values[1], name, "child");
-                            else if (relationship == "child")
-                                rg.AddEdge(values[1], name, "parent");
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Console.Write("Unable to read file {0}: {1}\n", filename, e.ToString());
-            }
-            Console.WriteLine(numPeople + " people read");
-        }
-
-        // Show the relationships a person is involved in
-        private static void ShowPerson(string name)
-        {
-            GraphNode n = rg.GetNode(name);
-            if (n != null)
-                Console.Write(n.ToString());
-            else
-                Console.WriteLine("{0} not found", name);
-        }
-
-        // Show a person's friends
-        private static void ShowFriends(string name)
-        {
-            GraphNode n = rg.GetNode(name);
-            if (n != null)
-            {
-                Console.Write("{0}'s friends: ",name);
-                List<GraphEdge> friendEdges = n.GetEdges("friend");
-                foreach (GraphEdge e in friendEdges) {
-                    Console.Write("{0} ", e.To);
-                }
-                Console.WriteLine();
-            }
-            else
-                Console.WriteLine("{0} not found", name);     
+            HelpCommand = new Commands.Help();
+            Commands = new[] {
+                new Commands.Dump(),
+                new Commands.Exit(),
+                new Commands.Friends(),
+                HelpCommand,
+                new Commands.Read(),
+                new Commands.Show(),
+            }.ToDictionary(command => command.Name);
         }
 
         // accept, parse, and execute user commands
-        private static void commandLoop()
+        private void commandLoop()
         {
-            string command = "";
-            string[] commandWords;
-            Console.Write("Welcome to Harry's Dutch Bingo Parlor!\n");
+            Console.WriteLine("Welcome to Harry’s Dutch Bingo Parlor!");
 
-            while (command != "exit")
+            while (!ShouldExit)
             {
-                Console.Write("\nEnter a command: ");
-                command = Console.ReadLine();
-                commandWords = Regex.Split(command, @"\s+");        // split input into array of words
-                command = commandWords[0];
+                Console.WriteLine();
+                Console.Write("Enter a command: ");
+                var line = Console.ReadLine();
+                var commandWords = Regex.Split(line, @"\s+");        // split input into array of words
+                var commandName = commandWords[0];
 
-                if (command == "exit")
+                Command command;
+                if (!Commands.TryGetValue(commandName, out command))
                 {
-                    // do nothing
+                    // illegal command
+                    Console.Error.WriteLine($"Command not found: {commandName}.");
+                    command = HelpCommand;
                 }
 
-                // read a relationship graph from a file
-                else if (command == "read" && commandWords.Length > 1)
-                    ReadRelationshipGraph(commandWords[1]);
-
-                // show information for one person
-                else if (command == "show" && commandWords.Length > 1)
-                    ShowPerson(commandWords[1]);
-
-                else if (command == "friends" && commandWords.Length > 1)
-                    ShowFriends(commandWords[1]);
-
-                // dump command prints out the graph
-                else if (command == "dump")
-                    rg.dump();
-
-                // illegal command
-                else
-                    Console.Write("\nLegal commands: read [filename], dump, show [personname],\n  friends [personname], exit\n");
+                var arguments = commandWords.Skip(1).ToArray();
+                while (!command.Run(this, arguments))
+                    // If the previous command indicated that help should be shown
+                    // (through its arguments validation), show help.
+                    command = HelpCommand;
             }
         }
 
         static void Main(string[] args)
         {
-            commandLoop();
+            new Program().commandLoop();
         }
     }
 }

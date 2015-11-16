@@ -68,11 +68,11 @@ namespace Bingo
         /// <summary>
         ///   Print a text representation graph.
         /// </summary>
-        public void dump()
+        public void Dump()
         {
             foreach (GraphNode n in nodes)
             {
-                Console.Write(n.ToString());
+                Console.Write(n);
             }
         }
     }
