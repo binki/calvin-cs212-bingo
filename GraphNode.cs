@@ -10,39 +10,38 @@ namespace Bingo
     /// </summary>
     class GraphNode
     {
-        private string name;
-        private List<GraphEdge> incidentEdges;
+        /// <summary>
+        ///   The node’s name.
+        /// </summary>
+        public string Name { get; }
 
-        // constructor
-        public GraphNode(string v)
+        readonly List<GraphEdge> edges;
+        public IReadOnlyList<GraphEdge> Edges { get { return edges; } }
+
+        public GraphNode(string name)
         {
-            name = v;
-            incidentEdges = new List<GraphEdge>();
+            Name = name;
+            edges = new List<GraphEdge>();
         }
 
-	// Add an edge (but don't add duplicate edges)
+	/// <summary>
+        ///   Add an edge if its equivalent does not already exist.
+        /// </summary>
         public void AddIncidentEdge(GraphEdge e)
         {
-	    foreach (GraphEdge edge in incidentEdges)
-	    {
-	        if (edge.ToString() == e.ToString()) 
-		    return;
-	    }
-            incidentEdges.Add(e);
-        }
+            // We silently ignore duplicate edges.
+            if (Edges.Any(edge => edge.ToString() == e.ToString()))
+                return;
 
-        // return a list of all outgoing edges
-        public List<GraphEdge> GetEdges()
-        {
-            return incidentEdges;
+            edges.Add(e);
         }
 
         // return a list of outgoing edges of specified label
         public List<GraphEdge> GetEdges(string label)
         {
             List<GraphEdge> list = new List<GraphEdge>();
-            foreach (GraphEdge e in incidentEdges)
-                if (e.Label() == label)
+            foreach (GraphEdge e in Edges)
+                if (e.Label == label)
                     list.Add(e);
             return list;
         }
@@ -50,18 +49,12 @@ namespace Bingo
         // return text form of node, including outgoing edges
         public override string ToString()
         {
-            string result = name + "\n";
-            foreach (GraphEdge e in incidentEdges)
+            string result = Name + "\n";
+            foreach (GraphEdge e in Edges)
             {
                 result = result + "  " + e.ToString() + "\n";
             }
             return result;
-        }
-
-        // return name of node
-        public string Name()
-        {
-            return name;
         }
     }
 }

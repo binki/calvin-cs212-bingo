@@ -16,20 +16,18 @@ namespace Bingo
          *  an adjacency list) and a dictionary (hash table) for efficiently 
          *  finding nodes by name
          */
-        /*  nodes property should probably be private, with accessor 
-	 *  functions, but it's public at the moment.
-	 */
-        public List<GraphNode> nodes;
-        private Dictionary<String, GraphNode> nodeDict;
+        List<GraphNode> nodes = new List<GraphNode>();
 
-        // constructor builds empty relationship graph
-        public RelationshipGraph()
-        {
-            nodes = new List<GraphNode>();
-            nodeDict = new Dictionary<String,GraphNode>();
-        }
+        /// <summary>
+        ///   All the nodes in the graph.
+        /// </summary>
+        public IReadOnlyList<GraphNode> Nodes { get { return nodes; } }
 
-        // AddNode creates and adds a new node if there isn't already one by that name
+        Dictionary<string, GraphNode> nodeDict = new Dictionary<string, GraphNode>();
+
+        /// <summary>
+        ///   Ensure a node with the given name exists, creating if necessary.
+        /// </summary>
         public void AddNode(string name)
         {
             if (!nodeDict.ContainsKey(name))
@@ -40,19 +38,25 @@ namespace Bingo
             }
         }
 
-        // AddEdge adds the edge, creating endpoint nodes if necessary.
-        // Edge is added to adjacency list of from edges.
-        public void AddEdge(string name1, string name2, string relationship) 
+        /// <summary>
+        ///   Adds the edge, creating endpoint nodes if necessary.
+        ///   Edge is added to adjacency list of the from node.
+        /// </summary>
+        public void AddEdge(string fromName, string toName, string relationship)
         {
-            AddNode(name1);                     // create the node if it doesn't already exist
-            GraphNode n1 = nodeDict[name1];     // now fetch a reference to the node
-            AddNode(name2);
-            GraphNode n2 = nodeDict[name2];
-            GraphEdge e = new GraphEdge(n1, n2, relationship);
-            n1.AddIncidentEdge(e);
+            // create the node if it doesn't already exist
+            AddNode(fromName);
+            // now fetch a reference to the node
+            var fromNode = nodeDict[fromName];
+            AddNode(toName);
+            var toNode = nodeDict[toName];
+            fromNode.AddIncidentEdge(new GraphEdge(fromNode, toNode, relationship));
         }
 
-        // Get a node by name using dictionary
+        /// <summary>
+        ///   Get a node by name. O(1).
+        /// </summary>
+        /// <returns>node if it exists or null</returns>
         public GraphNode GetNode(string name)
         {
             if (nodeDict.ContainsKey(name))
@@ -61,7 +65,9 @@ namespace Bingo
                 return null;
         }
 
-        // Return a text representation of graph
+        /// <summary>
+        ///   Print a text representation graph.
+        /// </summary>
         public void dump()
         {
             foreach (GraphNode n in nodes)

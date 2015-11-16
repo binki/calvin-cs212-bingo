@@ -89,7 +89,7 @@ namespace Bingo
                 Console.Write("{0}'s friends: ",name);
                 List<GraphEdge> friendEdges = n.GetEdges("friend");
                 foreach (GraphEdge e in friendEdges) {
-                    Console.Write("{0} ",e.To());
+                    Console.Write("{0} ", e.To);
                 }
                 Console.WriteLine();
             }

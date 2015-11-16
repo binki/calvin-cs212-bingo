@@ -10,35 +10,29 @@ namespace Bingo
     /// </summary>
     class GraphEdge
     {
-        private string label;
-        private GraphNode fromNode, toNode;
+        /// <summary>
+        ///   Label of this edge.
+        /// </summary>
+        public string Label { get; }
 
-        // constructor
-        public GraphEdge(GraphNode from, GraphNode to, string myLabel)
+        GraphNode FromNode { get; }
+        GraphNode ToNode { get; }
+
+        /// <summary>
+        ///   The name of the “to” person in the relationship.
+        /// </summary>
+        public string To { get { return ToNode.Name; } }
+
+        public GraphEdge(GraphNode from, GraphNode to, string label)
         {
-            fromNode = from;
-            toNode = to;
-            label = myLabel;
+            FromNode = from;
+            ToNode = to;
+            Label = label;
         }
 
-        // return label of edge
-        public string Label()
-        {
-            return label;
-        }
-
-        // return the name of the "to" person in the relationship
-        public string To()
-        {
-            return toNode.Name();
-        }
-
-        // return string form of edge
-        public override string ToString() 
-        {
-            string result = fromNode.Name() + " --(" + label + ")--> " + toNode.Name();
-            return result;
-        }
+        /// <summary>
+        ///   return string form of edge
+        /// </summary>
+        public override string ToString() => FromNode.Name + " --(" + Label + ")--> " + To;
     }
 }
-
