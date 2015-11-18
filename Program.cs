@@ -20,6 +20,15 @@ namespace Bingo
         // accept, parse, and execute user commands
         private void commandLoop()
         {
+            // Check the list of commands for duplicate names first to
+            // catch an anticipated programming error.
+            foreach (var command in Commands)
+            {
+                if (Commands.Where(c => c.Name == command.Name).Count() > 1)
+                    throw new Exception(
+                        $"The command {command.Name} has been defined multiple times."
+                        + " If you are adding a new command, please remember to update its base() call with a new name.");
+            }
             var commandMap = Commands.ToDictionary(command => command.Name);
             var helpCommand = commandMap["help"];
             Console.WriteLine("Welcome to Harry’s Dutch Bingo Parlor!");
