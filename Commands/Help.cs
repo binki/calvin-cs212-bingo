@@ -20,7 +20,7 @@ namespace Bingo.Commands
             Console.WriteLine("The following commands are available:");
             Console.WriteLine();
             foreach (var command in program.Commands.OrderBy(c => c.Name))
-                Console.WriteLine($"{command.Name} {command.Help}");
+                Console.WriteLine(command.Name + " " + command.Help);
             return true;
         }
     }

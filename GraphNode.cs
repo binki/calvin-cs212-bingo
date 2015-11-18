@@ -10,17 +10,18 @@ namespace Bingo
     /// </summary>
     class GraphNode
     {
+        readonly string name;
         /// <summary>
         ///   The node’s name.
         /// </summary>
-        public string Name { get; }
+        public string Name { get { return name; } }
 
         readonly List<GraphEdge> edges;
         public IReadOnlyList<GraphEdge> Edges { get { return edges; } }
 
         public GraphNode(string name)
         {
-            Name = name;
+            this.name = name;
             edges = new List<GraphEdge>();
         }
 

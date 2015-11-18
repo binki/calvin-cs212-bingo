@@ -11,11 +11,16 @@ namespace Bingo
 {
     class Program
     {
-        public RelationshipGraph RelationshipGraph { get; set; } = new RelationshipGraph();
+        public RelationshipGraph RelationshipGraph { get; set; }
         public bool ShouldExit { get; set; }
 
         [ImportMany(typeof(Command))]
         public IEnumerable<Command> Commands { get; set; }
+
+        Program()
+        {
+            RelationshipGraph = new RelationshipGraph();
+        }
 
         // accept, parse, and execute user commands
         private void commandLoop()
@@ -26,7 +31,7 @@ namespace Bingo
             {
                 if (Commands.Where(c => c.Name == command.Name).Count() > 1)
                     throw new Exception(
-                        $"The command {command.Name} has been defined multiple times."
+                        "The command " + command.Name + " has been defined multiple times."
                         + " If you are adding a new command, please remember to update its base() call with a new name.");
             }
             var commandMap = Commands.ToDictionary(command => command.Name);
@@ -45,7 +50,7 @@ namespace Bingo
                 if (!commandMap.TryGetValue(commandName, out command))
                 {
                     // illegal command
-                    Console.Error.WriteLine($"Command not found: {commandName}.");
+                    Console.Error.WriteLine("Command not found: " + commandName + ".");
                     command = helpCommand;
                 }
 

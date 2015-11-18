@@ -8,14 +8,17 @@ namespace Bingo
 {
     abstract class Command
     {
-        public string Help { get; }
-        int MinArguments { get; }
-        public string Name { get; }
+        readonly string help;
+        public string Help { get { return help; } }
+        readonly int minArguments;
+        int MinArguments { get { return minArguments; } }
+        readonly string name;
+        public string Name { get { return name; } }
         protected Command(string name, string help, int minArguments = 0)
         {
-            Help = help;
-            MinArguments = minArguments;
-            Name = name;
+            this.help = help;
+            this.minArguments = minArguments;
+            this.name = name;
         }
 
         /// <summary>Run this commandsummary>
@@ -24,7 +27,7 @@ namespace Bingo
         {
             if (arguments.Count < MinArguments)
             {
-                Console.Error.WriteLine($"{Name} requires {MinArguments}. You provided {arguments.Count}.");
+                Console.Error.WriteLine(Name + " requires " + MinArguments + ". You provided " + arguments.Count + ".");
                 return false;
             }
 

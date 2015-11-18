@@ -10,13 +10,16 @@ namespace Bingo
     /// </summary>
     class GraphEdge
     {
+        readonly string label;
         /// <summary>
         ///   Label of this edge.
         /// </summary>
-        public string Label { get; }
+        public string Label { get { return label; } }
 
-        GraphNode FromNode { get; }
-        GraphNode ToNode { get; }
+        readonly GraphNode fromNode;
+        GraphNode FromNode { get { return fromNode; } }
+        readonly GraphNode toNode;
+        GraphNode ToNode { get { return toNode; } }
 
         /// <summary>
         ///   The name of the “to” person in the relationship.
@@ -25,14 +28,17 @@ namespace Bingo
 
         public GraphEdge(GraphNode from, GraphNode to, string label)
         {
-            FromNode = from;
-            ToNode = to;
-            Label = label;
+            this.fromNode = from;
+            this.toNode = to;
+            this.label = label;
         }
 
         /// <summary>
         ///   return string form of edge
         /// </summary>
-        public override string ToString() => FromNode.Name + " --(" + Label + ")--> " + To;
+        public override string ToString()
+        {
+            return FromNode.Name + " --(" + Label + ")--> " + To;
+        }
     }
 }

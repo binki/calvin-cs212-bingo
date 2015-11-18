@@ -24,11 +24,11 @@ namespace Bingo.Commands
             var person = program.RelationshipGraph.GetNode(name);
             if (person == null)
             {
-                Console.WriteLine($"{name} not found.");
+                Console.WriteLine(name + " not found.");
                 return true;
             }
 
-            Console.WriteLine($"{name}’s friends: {string.Join(" ", from e in person.GetEdges("friend") select e.To)}");
+            Console.WriteLine(name + "’s friends: " + string.Join(" ", from e in person.GetEdges("friend") select e.To));
             return true;
         }
     }
