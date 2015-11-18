@@ -24,7 +24,7 @@ namespace Bingo
         {
             if (arguments.Count < MinArguments)
             {
-                Console.Error.WriteLine($"{Name} requires {MinArguments}. You provided {arguments.Count}.");
+                Console.Error.WriteLine($"{Name} requires at least {MinArguments} argument(s). You provided {arguments.Count}.");
                 return false;
             }
 
