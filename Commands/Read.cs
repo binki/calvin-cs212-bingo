@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -8,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace Bingo.Commands
 {
-    [Export(typeof(Command))]
     class Read : Command
     {
         public Read()

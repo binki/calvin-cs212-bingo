@@ -14,7 +14,7 @@ namespace Bingo
         public RelationshipGraph RelationshipGraph { get; set; } = new RelationshipGraph();
         public bool ShouldExit { get; set; }
 
-        [ImportMany(typeof(Command))]
+        [ImportMany]
         public IEnumerable<Command> Commands { get; set; }
 
         // accept, parse, and execute user commands
